@@ -1,0 +1,93 @@
+事件
+
+在用户操作页面中，用户为被监听者，浏览器为监听者来监听用户的操作行为，一旦用户触发了某个行为（click，mousedown....），浏览器就会去查看触发这个行为有没有绑定事件函数，如果有就执行。
+
+点击事件
+box.onmousedown 按下事件
+box.onmouseup 抬起事件
+box.onmousemove(e)鼠标移动
+e.clientX 不包含滚动条的距离
+e.pageX 包含滚动条的距离
+
+焦点
+打开页面时，已经有焦点了，在document上，选中焦点元素时，焦点就从document上跑到了焦点元素，失焦时再回到document上
+onfocus 获得焦点
+onblur 失去焦点
+属于事件 input.onfocus = function(){}
+
+focus 获得焦点
+blur 失去焦点
+属于属性 input.focus();
+
+onchange 表单的空间的内容发生变化的时候，发生在失去焦点以后，兼容至ie8
+oninput input的value发生变化（当input在输入内容的时候执行），兼容至ie9
+
+onsubmit 当表单提交的时候触发
+一般有on的都是事件
+submit 
+form.submit 提交表单
+
+obj.selectedIndex
+select选中的索引，默认从零开始，可读可写
+
+input.select（）；texteare（）；选中input，texteeare的内容
+
+box-shadow : h-shadow v-shadow blur spread color indet
+水平阴影位置 垂直阴影位置 模糊距离 阴影尺寸 阴影颜色 将外部阴影转换成内部阴影
+
+键盘事件
+onkeydown键盘按下     onkeyup键盘抬起
+每一个键都会对应一个键值  e.keyCode   我们可以通过keyCode来检测按的是哪个键
+有一些特殊的键值，altkey ctrlkey shiftkey 他们默认为false，按下的时候为true
+
+事件对象（event）
+当用户操作某个元素时，如果该元素有事件绑定函数，那么在这个函数中的第一个形参记录用户操作时的细节信息，是一个对象
+例 div.onclick = function(e){
+	//e就是事件对象
+}
+
+事件绑定
+obj.addEventListener(事件名（不带on），事件绑定函数，是否捕获（默认为false，不捕获）)
+
+事件解除
+传统情况下，将某个元素的事件赋予值为null就可以了
+事件绑定解除
+函数绑定时必须使用有名函数，解除方式obj.removeEventListener(要解除的事件，函数名，是否捕获)
+
+事件流（事件模型）
+从捕获到目标点到冒泡
+捕获 从外到里  
+目标点 所有的事件从上到下执行
+冒泡 从里到外
+整个过程从window到window
+
+冒泡： 当某个函数触发某个事件时，元素身上有事件绑定函数，不但会执行这个函数，还会从当前向上执行，向上的祖先节点也有相同的事件绑定函数，也执行，一直到window
+
+传统的添加事件绑定函数，只能监听到冒泡，不能监听到捕获
+
+捕获
+从window开始，向下传递，直到目标点
+由事件绑定里的true触发
+
+注意：如果绑定的函数名一样，后面的也会覆盖前面的，否则绑定几次就执行几次，但是否捕获的值不一样，不会被覆盖，因为一个发生在捕获，一个发生在冒泡（绑定函数为匿名函数时，相同事件会一直触发，不会被覆盖）
+如果目标点相同事件并且有多个事件绑定函数，从上到下依次执行，不是目标点，走事件流，从先捕获后冒泡，如果捕获或者冒泡相同事件也有多个事件绑定函数，也是从上往下执行
+
+e.cancelBubble = true 阻止冒泡（不是标准，都兼容）
+e.stoppropagation() 标准，低版本IE有小情绪
+冒泡是向上的过程，阻止冒泡一般都是在自生设置
+
+冒泡的使用（优点）
+e.target(事件监听，事件委托)
+事件源 触发事件的源头
+通过父级的事件，可以监听到是那个子集
+例 ul.onclick = function（）{
+	//e.target找到被操作的子集
+}
+注：只能父级监听子级，父级的兄弟元素或者父级的父级监听不到父级的子元素
+
+浏览器默认行为
+浏览器自带的行为
+解除方式
+传统 return false
+事件绑定 e.preventDefault()  低版本IE不支持
+注：要解除，必须要找到行为的源头（及触发点）
